@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container my-4">
     <Header />
     <div class="notification">
       <Form />
