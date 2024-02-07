@@ -1,3 +1,4 @@
+import type { FormDataType } from '@/types/common.d'
 import axios from 'axios'
 
 const context = `
@@ -11,7 +12,15 @@ You list streaming platforms of the movie in html format, using the ul and li ta
 The sentence introducing platforms should be "You can watch it on: " and be in a separate html p tag, with a css class 'has-text-weight-semibold'.
 `
 
-export async function makeRequest(content: string) {
+export const getUserMovieSuggestionPrompt = (data: FormDataType): string => {
+  const { genre, details, showSpoilers } = data
+  const prompt = `Suggest a move from ${genre} genre. The movie should be about ${details}.`
+  return showSpoilers
+    ? `${prompt}. You are allowed to tell spoilers and details of the plot.`
+    : `${prompt}. You are not going to tell any spoilers.`
+}
+
+export async function makeRequest(content: string): Promise<string | undefined> {
   const { VITE_OPENAI_API_URL, VITE_OPENAI_API_KEY } = import.meta.env
   try {
     const response = await axios.post(

@@ -11,36 +11,36 @@
       </div>
       <button class="button is-primary" :class="{ 'is-loading': isLoading }">Submit</button>
     </form>
-
-    <p class="mt-6 content" v-html="movieSuggestion" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { makeRequest } from '../../services/openaiService'
+import { makeRequest } from '@/services/openaiService'
+import { FormDataType } from '@/types/common.d'
 
 const genre = ref<string>('')
 const details = ref<string>('')
-const movieSuggestion = ref<string>('')
 const showSpoilers = ref<boolean>(false)
 
-const isLoading = ref<boolean>(false)
+defineProps({
+  isLoading: {
+    type: Boolean,
+    default: false
+  }
+})
 
-const getPrompt = (): string => {
-  const prompt = `Suggest a move from ${genre.value} genre. The movie should be about ${details.value}.`
-  return showSpoilers.value ? prompt : `${prompt} You are not going to tell any spoilers.`
-}
+const emit = defineEmits(['suggestMovie'])
 
 const findMovie = async (event: Event): Promise<void> => {
-  isLoading.value = true
   event.preventDefault()
 
-  const response = await makeRequest(getPrompt())
-  isLoading.value = false
-  console.log(response)
-  movieSuggestion.value = response.trim()
+  const data: FormDataType = {
+    genre: genre.value,
+    details: details.value,
+    showSpoilers: showSpoilers.value
+  }
+
+  emit('suggestMovie', data)
 }
 </script>
-
-<style scoped></style>

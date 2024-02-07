@@ -1,13 +1,11 @@
 <template>
   <div class="container my-4">
     <Header />
-    <div class="notification">
-      <Form />
-    </div>
+    <Main />
   </div>
 </template>
 
 <script setup lang="ts">
-import Form from './components/Form/Form.vue'
-import Header from './components/Header/Header.vue'
+import Header from '@/components/Header/Header.vue'
+import Main from '@/components/Main/Main.vue'
 </script>
