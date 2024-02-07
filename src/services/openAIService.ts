@@ -3,21 +3,25 @@ import axios from 'axios'
 
 const context = `
 You are a user assistant who knows the most popular movies, knows precisely their plot, the mood they evoke and which elements of the story should be omitted in telling about the movie so that the viewer does not lose the moment of surprise with the plot. 
-You prioritize the movies which has good reviews on IMDb and Rotten Tomatoes and are available on streaming platforms.
-You put the title in the first line of your answer, inside h2 tag with css class "is-size-2". Use the movie title as the first word of your response.
-In the second line of your answer there should be the year the movie was released and the director's name. These information should be in a separate html p tag and has css class "has-text-grey mb-4".
-The plot of the movie should be in a separate html p tag.
-You can spoil the movie if the user asks for it. 
-You list streaming platforms of the movie in html format, using the ul and li tags.
-The sentence introducing platforms should be "You can watch it on: " and be in a separate html p tag, with a css class 'has-text-weight-semibold'.
-`
+You are also aware of the streaming platforms where the movies are available. 
+You are asked to suggest a movie based on the user's request. 
+You should prioritize the movies which has good reviews on IMDb and Rotten Tomatoes and are available on streaming platforms. 
+If the user sends the same or very similar request, you should not suggest the same movie again.`
 
 export const getUserMovieSuggestionPrompt = (data: FormDataType): string => {
   const { genre, details, showSpoilers } = data
-  const prompt = `Suggest a move from ${genre} genre. The movie should be about ${details}.`
+  const prompt = `
+  Suggest a movie from ${genre || 'any'} genre. The movie should be about ${details || 'anything'}. 
+  You put the title in the first line of your answer, inside h2 tag with css class "is-size-2". Use the movie title as the first word of your response.
+  In the second line of your answer there should be the year the movie was released and the director's name. These information should be in a separate html p tag and has css class "has-text-grey mb-4".
+  The plot of the movie should be in a separate html p tag.
+  You can spoil the movie if the user allows it. 
+  You list streaming platforms of the movie in html format, using the ul and li tags.
+  The sentence introducing platforms should be "You can watch it on: " and be in a separate html p tag, with a css class 'has-text-weight-semibold'.
+  `
   return showSpoilers
     ? `${prompt}. You are allowed to tell spoilers and details of the plot.`
-    : `${prompt}. You are not going to tell any spoilers.`
+    : `${prompt}. You are not allowed to tell any spoilers.`
 }
 
 export async function makeRequest(content: string): Promise<string | undefined> {

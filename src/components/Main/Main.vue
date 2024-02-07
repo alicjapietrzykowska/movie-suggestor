@@ -1,7 +1,7 @@
 <template>
   <main class="notification">
-    <Form @suggest-movie="getUserPreferences" :is-loading="isLoading" />
     <Answer :movie-suggestion="suggestion" />
+    <Form @suggest-movie="getUserPreferences" :is-loading="isLoading" />
   </main>
 </template>
 
@@ -18,18 +18,19 @@ const userData = ref<FormDataType>({
   showSpoilers: false
 })
 
+const prompt = ref<string>('')
 const suggestion = ref<string>('')
 const isLoading = ref<boolean>(false)
 
 const getUserPreferences = (data: FormDataType) => {
   isLoading.value = true
   userData.value = data
-  const prompt = getUserMovieSuggestionPrompt(data)
-  getMovieSuggestion(prompt)
+  prompt.value = getUserMovieSuggestionPrompt(data)
+  getMovieSuggestion()
 }
 
-const getMovieSuggestion = async (prompt: string) => {
-  suggestion.value = await makeRequest(prompt)
+const getMovieSuggestion = async () => {
+  suggestion.value = await makeRequest(prompt.value)
   isLoading.value = false
 }
 </script>
