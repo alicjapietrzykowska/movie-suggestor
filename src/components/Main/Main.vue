@@ -1,7 +1,7 @@
 <template>
   <main class="notification">
-    <Form @suggest-movie="getUserPreferences" :is-loading="isLoading" />
     <Answer :movie-suggestion="suggestion" />
+    <Form @suggest-movie="manageUserRequest" :is-loading="isLoading" />
   </main>
 </template>
 
@@ -9,27 +9,44 @@
 import { ref } from 'vue'
 import Form from '@/components/Form/Form.vue'
 import Answer from '@/components/Answer/Answer.vue'
-import { FormDataType } from '@/types/common'
-import { getUserMovieSuggestionPrompt, makeRequest } from '@/services/openAIService'
+import { FormDataType, MovieDetails, OpenAiMessage } from '@/types/common'
+import {
+  getUserMoviePreferencesPrompt,
+  makeRequest,
+  getSuggestSomethingElsePrompt
+} from '@/services/openAIService'
+import { toast } from 'bulma-toast'
 
-const userData = ref<FormDataType>({
-  genre: '',
-  details: '',
-  showSpoilers: false
-})
-
-const suggestion = ref<string>('')
+const prompt = ref<OpenAiMessage>()
+const suggestion = ref<MovieDetails>()
 const isLoading = ref<boolean>(false)
 
-const getUserPreferences = (data: FormDataType) => {
+const manageUserRequest = (data: FormDataType) => {
   isLoading.value = true
-  userData.value = data
-  const prompt = getUserMovieSuggestionPrompt(data)
-  getMovieSuggestion(prompt)
+  if (data.alreadySuggested) {
+    prompt.value = getSuggestSomethingElsePrompt()
+  } else {
+    prompt.value = getUserMoviePreferencesPrompt(data)
+  }
+  getMovieSuggestion()
 }
 
-const getMovieSuggestion = async (prompt: string) => {
-  suggestion.value = await makeRequest(prompt)
+const getMovieSuggestion = async () => {
+  const response = await makeRequest(prompt.value as OpenAiMessage)
   isLoading.value = false
+  if (!response) {
+    showToast()
+    return
+  }
+  suggestion.value = response
+}
+
+const showToast = () => {
+  toast({
+    message: 'Whoops! Something went wrong! Refresh the app or try again after a moment.',
+    type: 'is-danger',
+    dismissible: true,
+    animate: { in: 'fadeIn', out: 'fadeOut' }
+  })
 }
 </script>
