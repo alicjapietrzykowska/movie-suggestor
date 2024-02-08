@@ -9,8 +9,9 @@
 import { ref } from 'vue'
 import Form from '@/components/Form/Form.vue'
 import Answer from '@/components/Answer/Answer.vue'
-import { FormDataType } from '@/types/common'
+import { FormDataType, MovieDetails } from '@/types/common'
 import { getUserMovieSuggestionPrompt, makeRequest } from '@/services/openAIService'
+import { toast } from 'bulma-toast'
 
 const userData = ref<FormDataType>({
   genre: '',
@@ -19,7 +20,7 @@ const userData = ref<FormDataType>({
 })
 
 const prompt = ref<string>('')
-const suggestion = ref<string>('')
+const suggestion = ref<MovieDetails>({})
 const isLoading = ref<boolean>(false)
 
 const getUserPreferences = (data: FormDataType) => {
@@ -29,8 +30,22 @@ const getUserPreferences = (data: FormDataType) => {
   getMovieSuggestion()
 }
 
+const showToast = () => {
+  toast({
+    message: 'Whoops! Something went wrong! Refresh the app or try again after a moment.',
+    type: 'is-danger',
+    dismissible: true,
+    animate: { in: 'fadeIn', out: 'fadeOut' }
+  })
+}
+
 const getMovieSuggestion = async () => {
-  suggestion.value = await makeRequest(prompt.value)
+  const response = await makeRequest(prompt.value)
   isLoading.value = false
+  if (!response) {
+    showToast()
+    return
+  }
+  suggestion.value = response
 }
 </script>

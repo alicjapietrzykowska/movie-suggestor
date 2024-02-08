@@ -1,30 +1,40 @@
-import type { FormDataType } from '@/types/common.d'
+import type { FormDataType, MovieDetails } from '@/types/common.d'
 import axios from 'axios'
 
+const alreadySuggestedMovies: Array<string> = []
+
 const context = `
+This is CONTEXT INFORMATION.
 You are a user assistant who knows the most popular movies, knows precisely their plot, the mood they evoke and which elements of the story should be omitted in telling about the movie so that the viewer does not lose the moment of surprise with the plot. 
 You are also aware of the streaming platforms where the movies are available. 
-You are asked to suggest a movie based on the user's request. 
+You are allowed to tell spoilers and movie details to the user if they ask for it.
 You should prioritize the movies which has good reviews on IMDb and Rotten Tomatoes and are available on streaming platforms. 
-If the user sends the same or very similar request, you should not suggest the same movie again.`
+If the user sends the same or very similar request, you should not suggest the same movie again.
+`
 
 export const getUserMovieSuggestionPrompt = (data: FormDataType): string => {
+  const forbiddenMovies = alreadySuggestedMovies.join(', ')
+  console.log(forbiddenMovies)
   const { genre, details, showSpoilers } = data
   const prompt = `
-  Suggest a movie from ${genre || 'any'} genre. The movie should be about ${details || 'anything'}. 
-  You put the title in the first line of your answer, inside h2 tag with css class "is-size-2". Use the movie title as the first word of your response.
-  In the second line of your answer there should be the year the movie was released and the director's name. These information should be in a separate html p tag and has css class "has-text-grey mb-4".
-  The plot of the movie should be in a separate html p tag.
-  You can spoil the movie if the user allows it. 
-  You list streaming platforms of the movie in html format, using the ul and li tags.
-  The sentence introducing platforms should be "You can watch it on: " and be in a separate html p tag, with a css class 'has-text-weight-semibold'.
+  You randomly pick a movie from ${genre || 'any'} genre. The movie is about ${details || 'anything'}. 
+  You do not return movies with these titles: ${forbiddenMovies}. If the movie title is on the provided list you will pick randomly another movie matching the genre and details which title also isn't on the list.
+  You return all the platform that has the movie available to watch at this moment.
+  Your message content include only the movie details in json format object with the following structure: 
+  { 
+    "title": "Movie Title", 
+    "year": "Year", 
+    "director": "Director", 
+    "plot": "Minimum 3 sentences of the movie plot ${showSpoilers ? 'with spoilers' : 'without spoilers'}", 
+    "streamingPlatforms": ["Platform 1", "Platform 2"] 
+  }. 
+  You do not write anything else in the message content.
+  You do not justify your answers. You do not give information not mentioned in the CONTEXT INFORMATION.
   `
-  return showSpoilers
-    ? `${prompt}. You are allowed to tell spoilers and details of the plot.`
-    : `${prompt}. You are not allowed to tell any spoilers.`
+  return prompt
 }
 
-export async function makeRequest(content: string): Promise<string | undefined> {
+export async function makeRequest(content: string): Promise<MovieDetails | undefined> {
   const { VITE_OPENAI_API_URL, VITE_OPENAI_API_KEY } = import.meta.env
   try {
     const response = await axios.post(
@@ -43,8 +53,11 @@ export async function makeRequest(content: string): Promise<string | undefined> 
         }
       }
     )
-    return response.data.choices[0].message.content
+    const movieDetails = JSON.parse(response.data.choices[0].message.content)
+    alreadySuggestedMovies.push(`'${movieDetails.title}'`)
+    return movieDetails
   } catch (error) {
     console.error('Error making request to OpenAI API:', error)
+    return
   }
 }
