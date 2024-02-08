@@ -9,7 +9,11 @@
         <input id="spoilers" type="checkbox" class="checkbox mr-3" v-model="showSpoilers" />
         <label for="spoilers">Show spoilers?</label>
       </div>
-      <button class="button is-primary" :class="{ 'is-loading': isLoading }">
+      <button
+        class="button is-primary"
+        :class="{ 'is-loading is-disabled': isLoading }"
+        :disabled="isLoading"
+      >
         {{ buttonText }}
       </button>
     </form>
@@ -42,7 +46,8 @@ const findMovie = async (): Promise<void> => {
   const data: FormDataType = {
     genre: genre.value,
     details: details.value,
-    showSpoilers: showSpoilers.value
+    showSpoilers: showSpoilers.value,
+    alreadySuggested: alreadySuggested.value
   }
 
   emit('suggestMovie', data)

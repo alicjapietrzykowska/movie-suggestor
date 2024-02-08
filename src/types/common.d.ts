@@ -1,7 +1,13 @@
+export type OpenAiMessage = {
+  role: string
+  content: string
+}
+
 export type FormDataType = {
   genre: string
   details: string
   showSpoilers: boolean
+  alreadySuggested: boolean
 }
 
 export type MovieDetails = {

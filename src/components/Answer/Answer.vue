@@ -1,6 +1,6 @@
 <template>
   <div class="mb-5">
-    <h2 v-if="!movieSuggestion.title" class="subtitle">
+    <h2 v-if="!movieSuggestion?.title" class="subtitle">
       Type something to get a movie suggestion...
     </h2>
     <div v-else class="content">
