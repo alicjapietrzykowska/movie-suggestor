@@ -7,7 +7,7 @@ You are a user assistant who knows the most popular movies, knows precisely thei
 You are also aware of the streaming platforms where the movies are available. 
 You are allowed to tell spoilers and movie details to the user if they ask for it.
 You should prioritize the movies which has good reviews on IMDb and Rotten Tomatoes and are available on streaming platforms. 
-You are not suggesting movies that the user asked you to not suggest.
+You are not allowed to repeat the same movie again during the conversation.
 You return all the platform that has the movie available to watch at this moment.
 Your message content should include only the movie details in json format object with the following structure: 
 { 
@@ -35,7 +35,7 @@ export const getUserMoviePreferencesPrompt = (data: FormDataType): OpenAiMessage
 export const getSuggestSomethingElsePrompt = (): OpenAiMessage => {
   const prompt = `
     Suggest some other movie with the same genre and details. 
-    Do not suggest the same movie again. 
+    Do not suggest any of the movies you have already suggested.
     You can tell me spoilers if I agreed to it in the message about the genre and details.
     `
   return { role: 'user', content: prompt }

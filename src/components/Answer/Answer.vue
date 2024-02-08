@@ -34,13 +34,12 @@ const streamingPlatforms = ref<string[]>([])
 
 watch(
   () => props.movieSuggestion,
-  (newVal) => {
-    console.log(newVal)
-    title.value = newVal.title
-    year.value = newVal.year
-    director.value = newVal.director
-    plot.value = newVal.plot
-    streamingPlatforms.value = newVal.streamingPlatforms
+  (movie) => {
+    title.value = movie.title
+    year.value = movie.year
+    director.value = movie.director
+    plot.value = movie.plot
+    streamingPlatforms.value = movie.streamingPlatforms
   }
 )
 </script>

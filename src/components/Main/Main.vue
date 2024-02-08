@@ -31,15 +31,6 @@ const manageUserRequest = (data: FormDataType) => {
   getMovieSuggestion()
 }
 
-const showToast = () => {
-  toast({
-    message: 'Whoops! Something went wrong! Refresh the app or try again after a moment.',
-    type: 'is-danger',
-    dismissible: true,
-    animate: { in: 'fadeIn', out: 'fadeOut' }
-  })
-}
-
 const getMovieSuggestion = async () => {
   const response = await makeRequest(prompt.value as OpenAiMessage)
   isLoading.value = false
@@ -48,5 +39,14 @@ const getMovieSuggestion = async () => {
     return
   }
   suggestion.value = response
+}
+
+const showToast = () => {
+  toast({
+    message: 'Whoops! Something went wrong! Refresh the app or try again after a moment.',
+    type: 'is-danger',
+    dismissible: true,
+    animate: { in: 'fadeIn', out: 'fadeOut' }
+  })
 }
 </script>
