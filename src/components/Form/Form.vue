@@ -22,7 +22,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { FormDataType } from '@/types/common.d'
+import type { FormDataType } from '@/types/common.d'
 
 const genre = ref<string>('')
 const details = ref<string>('')

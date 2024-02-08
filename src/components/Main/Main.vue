@@ -9,7 +9,7 @@
 import { ref } from 'vue'
 import Form from '@/components/Form/Form.vue'
 import Answer from '@/components/Answer/Answer.vue'
-import { FormDataType, MovieDetails, OpenAiMessage } from '@/types/common.d'
+import type { FormDataType, MovieDetails, OpenAiMessage } from '@/types/common.d'
 import {
   getUserMoviePreferencesPrompt,
   makeRequest,
