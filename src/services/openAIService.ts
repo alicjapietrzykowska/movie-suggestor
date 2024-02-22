@@ -42,20 +42,20 @@ export const getSuggestSomethingElsePrompt = (): OpenAiMessage => {
 }
 
 export async function makeRequest(message: OpenAiMessage): Promise<MovieDetails | undefined> {
-  const { OPENAI_API_URL, OPENAI_API_KEY } = process.env
+  const { VITE_OPENAI_API_URL, VITE_OPENAI_API_KEY } = import.meta.env
 
   messages.push(message)
 
   try {
     const response = await axios.post(
-      OPENAI_API_URL as string,
+      VITE_OPENAI_API_URL as string,
       {
         model: 'gpt-3.5-turbo',
         messages
       },
       {
         headers: {
-          Authorization: `Bearer ${OPENAI_API_KEY}`,
+          Authorization: `Bearer ${VITE_OPENAI_API_KEY}`,
           'Content-Type': 'application/json'
         }
       }
