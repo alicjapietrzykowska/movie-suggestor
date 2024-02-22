@@ -1,52 +1,63 @@
-# simple-ai-app
+# Cooking Notes
+> A small app designed to collect recipes in one place and add your own notes to them. Created using Vue 3 and Firebase.
 
-This template should help get you started developing with Vue 3 in Vite.
+## Demo
+https://movie-suggestor-production.up.railway.app/
 
-## Recommended IDE Setup
+## Features
+- Save custom recipes and ingredients to your account or the local browser storage
+- Write down where you got the recipe from - internet, book or other source
+- Rate the recipe on a 5-point scale
+- Record when you last used the recipe
+- Add your own notes to the recipe
+- Search for a recipe by the name
+- Sort saved recipes by the name, rating, and the date of use. 
+- Filter recipes by ingredients and source
+- View and edit recipes wherever you are using mobile device. 
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+## Technologies Used
+- Vue 3
+- Firebase Authentication
+- Firebase Realtime Database
+- LocalStorage
+- PrimeVue 3
+- Typescript
+- SCSS
 
-## Type Support for `.vue` Imports in TS
+## How To Use With NPM
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+To clone and run this application, you'll need [Git](https://git-scm.com) and [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) installed on your computer. From your command line:
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
-
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
+```bash
+# Clone this repository
+$ git clone https://github.com/alicjalukaszewska/cooking-notes.git
+# Go into the repository
+$ cd cooking-notes
+# Install dependencies
+$ npm install
+# Run the app
+$ npm run serve
 ```
+You will then be able to access the app at localhost:8080
 
-### Compile and Hot-Reload for Development
+## How To Use With Docker
 
-```sh
-npm run dev
+To run this application with Docker, you'll need [Docker](https://docs.docker.com/) installed on your computer. From your command line:
+
+```bash
+# Clone this repository
+$ git clone https://github.com/alicjalukaszewska/cooking-notes.git
+# Go into the repository
+$ cd cooking-notes
+# Run Dockerfile
+$ docker compose up -d
 ```
+You will then be able to access the app at localhost:8080
 
-### Type-Check, Compile and Minify for Production
+## Room for Improvement
+- Storing the quantity of ingredients for each recipe
+- Dark mode
+- Support for various languages
 
-```sh
-npm run build
-```
-
-### Run Unit Tests with [Vitest](https://vitest.dev/)
-
-```sh
-npm run test:unit
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+## License
+MIT
