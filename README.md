@@ -1,4 +1,4 @@
-# Cooking Notes
+# Movie Suggestor
 A simple app using Open AI which helps you find a movie to watch based on your preferences
 
 ## Demo
